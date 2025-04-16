@@ -99,11 +99,18 @@ window.addEventListener('load', typeWriter);
 
 // Skills Progress Animation
 const skills = [
-    { name: 'JavaScript', level: 90 },
-    { name: 'HTML/CSS', level: 95 },
-    { name: 'React', level: 85 },
-    { name: 'Node.js', level: 80 },
-    { name: 'Python', level: 75 }
+    { name: 'Java', level: 95 },
+    { name: 'Spring', level: 90 },
+    { name: 'PostgreSQL', level: 85 },
+    { name: 'MS SQL Server', level: 85 },
+    { name: 'Git', level: 90 },
+    { name: 'Docker', level: 80 },
+    { name: 'Apache Kafka', level: 75 },
+    { name: 'LWJGL', level: 85 },
+    { name: 'C#', level: 80 },
+    { name: 'ASP.NET', level: 75 },
+    { name: 'React', level: 70 },
+    { name: 'JavaScript', level: 75 }
 ];
 
 const skillsGrid = document.querySelector('.skills-grid');

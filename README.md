@@ -99,6 +99,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Ilian Damirov - [your.email@example.com](mailto:your.email@example.com)
+Ilian Damirov - [damirov.ilian@gmail.com](mailto:damirov.ilian@gmail.com)
 
-Project Link: [https://github.com/yourusername/KingEGame.github.io](https://github.com/yourusername/KingEGame.github.io)
+Project Link: [https://github.com/KingEGame/KingEGame.github.io](https://github.com/KingEGame/KingEGame.github.io)
