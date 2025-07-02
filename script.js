@@ -132,10 +132,10 @@ window.addEventListener('scroll', () => {
     lastScroll = currentScroll;
 });
 
-// Enhanced Intersection Observer for Animations
+// Simplified observer that doesn't hide elements
 const observerOptions = {
     root: null,
-    rootMargin: '-100px 0px',
+    rootMargin: '0px',
     threshold: 0.1
 };
 
@@ -149,8 +149,8 @@ const observer = new IntersectionObserver((entries) => {
                 animateCounter(entry.target);
             }
             
-            if (entry.target.classList.contains('skill-tag')) {
-                animateSkillTags(entry.target.parentElement);
+            if (entry.target.classList.contains('skill-category')) {
+                animateSkillTags(entry.target);
             }
             
             if (entry.target.classList.contains('timeline-item')) {
@@ -207,14 +207,14 @@ function animateCounter(element) {
     }, 16);
 }
 
-// Animate Skill Tags
+// Animate Skill Tags - simplified to ensure visibility
 function animateSkillTags(container) {
     const tags = container.querySelectorAll('.skill-tag');
-    tags.forEach((tag, index) => {
-        setTimeout(() => {
-            tag.style.opacity = '1';
-            tag.style.transform = 'translateY(0) scale(1)';
-        }, index * 100);
+    tags.forEach((tag) => {
+        tag.style.opacity = '1';
+        tag.style.transform = 'translateY(0) scale(1)';
+        tag.style.display = 'inline-block';
+        tag.style.visibility = 'visible';
     });
 }
 
@@ -494,6 +494,35 @@ function initResumeDownload() {
     }
 }
 
+// Force show all skill tags
+function forceShowSkills() {
+    const skillTags = document.querySelectorAll('.skill-tag');
+    const skillCategories = document.querySelectorAll('.skill-category');
+    const skillTagContainers = document.querySelectorAll('.skill-tags');
+    
+    skillCategories.forEach(category => {
+        category.style.display = 'block';
+        category.style.opacity = '1';
+        category.style.visibility = 'visible';
+    });
+    
+    skillTagContainers.forEach(container => {
+        container.style.display = 'flex';
+        container.style.opacity = '1';
+        container.style.visibility = 'visible';
+    });
+    
+    skillTags.forEach(tag => {
+        tag.style.display = 'inline-block';
+        tag.style.opacity = '1';
+        tag.style.visibility = 'visible';
+        tag.style.transform = 'none';
+        tag.style.position = 'static';
+    });
+    
+    console.log('Found and showed', skillTags.length, 'skill tags');
+}
+
 // Initialize all functions when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Simple and safe initialization
@@ -501,11 +530,18 @@ document.addEventListener('DOMContentLoaded', function() {
         initContactForm();
         initResumeDownload();
         
+        // Force show skills immediately
+        forceShowSkills();
+        
+        // Double-check after a delay
+        setTimeout(forceShowSkills, 100);
+        setTimeout(forceShowSkills, 500);
+        
         // Add enhanced effects only if everything is working
         setTimeout(() => {
             createTypingEffect();
             createParticleBackground();
-        }, 500);
+        }, 1000);
         
     } catch (error) {
         console.log('Some features failed to load, but the site will work normally');
@@ -522,17 +558,38 @@ enhancedStyles.textContent = `
     
     .skill-tag {
         transition: all 0.3s ease;
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
     
     .skill-tag:hover {
         transform: translateY(-2px) scale(1.05);
-        background: var(--primary-color);
-        color: white;
+        background: #60a5fa !important;
+        color: white !important;
     }
     
     .animate {
         opacity: 1 !important;
         transform: translateY(0) !important;
+    }
+    
+    /* Ensure all skill elements are visible */
+    .skills-categories,
+    .skill-category,
+    .skill-tags,
+    .skill-tag {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .skill-tags {
+        display: flex !important;
+    }
+    
+    .skill-tag {
+        display: inline-block !important;
     }
 `;
 document.head.appendChild(enhancedStyles);
