@@ -43,24 +43,49 @@ const menuBtn = document.querySelector('.menu-btn');
 const navLinks = document.querySelector('.nav-links');
 const navLinksItems = document.querySelectorAll('.nav-links a');
 
-menuBtn.addEventListener('click', () => {
-    const isVisible = navLinks.style.display === 'flex';
-    navLinks.style.display = isVisible ? 'none' : 'flex';
-    
-    // Update menu icon
-    const icon = menuBtn.querySelector('i');
-    icon.className = isVisible ? 'fas fa-bars' : 'fas fa-times';
-});
-
-// Close mobile menu when clicking on nav links
-navLinksItems.forEach(link => {
-    link.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            navLinks.style.display = 'none';
-            menuBtn.querySelector('i').className = 'fas fa-bars';
+if (menuBtn && navLinks) {
+    menuBtn.addEventListener('click', () => {
+        const isVisible = navLinks.classList.contains('show');
+        
+        if (isVisible) {
+            navLinks.classList.remove('show');
+        } else {
+            navLinks.classList.add('show');
+        }
+        
+        // Update menu icon
+        const icon = menuBtn.querySelector('i');
+        if (icon) {
+            icon.className = isVisible ? 'fas fa-bars' : 'fas fa-times';
         }
     });
-});
+
+    // Close mobile menu when clicking on nav links
+    navLinksItems.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                navLinks.classList.remove('show');
+                const icon = menuBtn.querySelector('i');
+                if (icon) {
+                    icon.className = 'fas fa-bars';
+                }
+            }
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            !menuBtn.contains(e.target) && 
+            !navLinks.contains(e.target)) {
+            navLinks.classList.remove('show');
+            const icon = menuBtn.querySelector('i');
+            if (icon) {
+                icon.className = 'fas fa-bars';
+            }
+        }
+    });
+}
 
 // Smooth Scrolling with offset for fixed navbar
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
