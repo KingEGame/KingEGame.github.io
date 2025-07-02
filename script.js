@@ -1,34 +1,40 @@
 // Theme Management
 const themeToggle = document.querySelector('.theme-toggle');
-const themeIcon = themeToggle.querySelector('i');
 const htmlElement = document.documentElement;
 
-// Check for saved theme preference or default to light mode
-const currentTheme = localStorage.getItem('theme') || 'light';
+// Check for saved theme preference or default to dark mode
+const currentTheme = localStorage.getItem('theme') || 'dark';
 htmlElement.setAttribute('data-theme', currentTheme);
-updateThemeIcon(currentTheme);
 
-// Theme toggle functionality
-themeToggle.addEventListener('click', () => {
-    const currentTheme = htmlElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    htmlElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
-    
-    // Add smooth transition effect
-    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-    setTimeout(() => {
-        document.body.style.transition = '';
-    }, 300);
-});
+// Only update theme if elements exist
+if (themeToggle) {
+    const themeIcon = themeToggle.querySelector('i');
+    updateThemeIcon(currentTheme);
 
-function updateThemeIcon(theme) {
-    if (theme === 'dark') {
-        themeIcon.className = 'fas fa-sun';
-    } else {
-        themeIcon.className = 'fas fa-moon';
+    // Theme toggle functionality
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        htmlElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+        
+        // Add smooth transition effect
+        document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+        setTimeout(() => {
+            document.body.style.transition = '';
+        }, 300);
+    });
+
+    function updateThemeIcon(theme) {
+        if (themeIcon) {
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
     }
 }
 
@@ -131,7 +137,7 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for animation
+// Observe elements for animation (only if elements exist)
 const elementsToObserve = [
     'section',
     '.stat-item',
@@ -142,14 +148,17 @@ const elementsToObserve = [
     '.competency-item'
 ];
 
-elementsToObserve.forEach(selector => {
-    document.querySelectorAll(selector).forEach(element => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(30px)';
-        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(element);
+// Only add animations if page is fully loaded and elements exist
+setTimeout(() => {
+    elementsToObserve.forEach(selector => {
+        document.querySelectorAll(selector).forEach(element => {
+            if (element) {
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(element);
+            }
+        });
     });
-});
+}, 100);
 
 // Counter Animation for Stats
 function animateCounter(element) {
@@ -462,38 +471,46 @@ function initResumeDownload() {
 
 // Initialize all functions when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    createTypingEffect();
-    createParticleBackground();
-    initContactForm();
-    initResumeDownload();
-    
-    // Add loading animation
-    document.body.classList.add('loaded');
+    // Simple and safe initialization
+    try {
+        initContactForm();
+        initResumeDownload();
+        
+        // Add enhanced effects only if everything is working
+        setTimeout(() => {
+            createTypingEffect();
+            createParticleBackground();
+        }, 500);
+        
+    } catch (error) {
+        console.log('Some features failed to load, but the site will work normally');
+    }
 });
 
-// Add loading styles
-const loadingStyles = document.createElement('style');
-loadingStyles.textContent = `
+// Add enhanced styles for better UX
+const enhancedStyles = document.createElement('style');
+enhancedStyles.textContent = `
     body {
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    }
-    
-    body.loaded {
         opacity: 1;
+        transition: opacity 0.3s ease;
     }
     
     .skill-tag {
-        opacity: 0;
-        transform: translateY(20px) scale(0.8);
         transition: all 0.3s ease;
     }
     
-    .skill-category:hover .skill-tag {
-        transform: translateY(0) scale(1);
+    .skill-tag:hover {
+        transform: translateY(-2px) scale(1.05);
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .animate {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
     }
 `;
-document.head.appendChild(loadingStyles);
+document.head.appendChild(enhancedStyles);
 
 // Performance optimization: Debounce scroll events
 function debounce(func, wait) {
